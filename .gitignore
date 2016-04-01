@@ -18,9 +18,9 @@ Vagrantfile
 
 # Eclipse
 *.settings/
-.buildpath
-.project
-.metadata/
+*.buildpath
+*.project
+*.metadata/
 
 # Custom
 *.nogit
