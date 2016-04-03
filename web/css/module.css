@@ -1,0 +1,98 @@
+@CHARSET "ISO-8859-1";
+
+div.wrap div.block {
+    padding: 25px 35px;
+}
+
+.title {
+	text-align: center;
+}
+
+body {
+    color: #2D2D2D;
+    font-family: "Raleway", sans-serif;
+}
+
+a {
+	color: #AFC3C9;
+}
+
+.twitter_self {
+	display: inline;
+	text-align: center;
+	font-size: 20px;
+	color: #90C3D4;
+	margin: auto;
+	padding: 5px;
+}
+
+.desc {
+	color: white;
+	font-size: 12px;
+}
+
+.twitter_post {
+    box-sizing: border-box;
+    font-weight: 800;
+    font-size: 18px;
+    text-transform: uppercase;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 40px;
+    padding: 10px;
+    border: 2px solid white;
+    width: 25%;
+    word-wrap: break-word;
+}
+
+img {
+	max-width:100%;
+	max-height:100%;
+	vertical-align: middle;
+}
+
+.twitter_user {
+	color: #90C3D4;
+}
+
+li {
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    font-weight: 800;
+    font-size: 18px;
+    text-transform: uppercase;
+    list-style-type: disc;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 40px;
+    list-style-type: none;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    display: inline;
+}
+
+.user_bar {
+    margin: inherit;
+    text-align: left;
+    float: right;
+}
+
+.module_bar {
+    margin: inherit;
+    text-align: left;
+    float: left;
+}
+
+.float-right {
+	float: right;
+	z-index: 0;
+}
+
+i {
+	padding-left: 10px;
+	padding-right: 5px;
+}
