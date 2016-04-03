@@ -24,3 +24,5 @@ Vagrantfile
 
 # Custom
 *.nogit
+
+vendor/*
