@@ -4,7 +4,7 @@ $(function(){
                 
             case "menu_twitter": {
                            
-                post('../module/module_twitter.php', {
+                post('../module/module_main.php', {
                     twitter_username: "lyokofirelyte"
                 }, function(data){
                 	location.reload();
@@ -15,7 +15,7 @@ $(function(){
 
             case "module_login": {
                 
-                post('../module/module_twitter.php', {
+                post('../module/module_main.php', {
                     logged: "yes"
                 }, function(data){
                 	location.reload();
