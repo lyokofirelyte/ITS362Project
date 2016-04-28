@@ -2,7 +2,7 @@
 
 	// for testing purposes
 	$_SESSION["youtube_amount"] = 0;
-	$_POST['q'] = "food";
+	$_POST['q'] = $_SESSION["youtube_search"];
 	$_SESSION["youtube_array"] = array();
 	
 	if (isset($_POST['q'])){

@@ -58,6 +58,7 @@
 #footer {
    bottom: 0;
    width: 100%;
+   clear: both;
 }
 
 .title {
@@ -66,7 +67,7 @@
 }
 
 body {
-    color: black;
+    color: white;
     font-family: "Raleway", sans-serif;
 }
 
@@ -78,7 +79,7 @@ body {
 }
 
 a {
-	color: #000000;
+	color: white;
 }
 
 .youtube_video {
@@ -86,7 +87,7 @@ a {
 }
 
 .desc {
-	color: black;
+	color: white;
 	font-size: 12px;
 }
 
@@ -109,6 +110,19 @@ a {
    overflow-y: scroll;
 }
 
+.twitter_header {
+	float: left;
+	display: inline;
+	vertical-align: middle;
+	text-align: center;
+	padding: 10px;
+	margin-left: 20px;
+}
+
+.twitter_header img {
+	vertical-align: middle;
+}
+
 .twitter_post, .youtube_post, .reddit_post, .tumblr_post {
     box-sizing: border-box;
     font-weight: 800;
@@ -119,13 +133,13 @@ a {
     -webkit-margin-end: 10px;
     -webkit-padding-start: 0px;
     padding: 10px;
-    border: 2px solid white;
     word-wrap: break-word;
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0.5);
     display: inline-block;
     width: inherit;
     margin-left: 0px;
     margin-right: 0px;
+    opacity: 0;
 }
 
 @media (max-width: 1200px) {
@@ -157,7 +171,7 @@ a {
   }
 }
 
-.all img {
+.the_grid img {
 	max-width: 100%;
 	max-height: 300px;
 	vertical-align: middle;
@@ -167,29 +181,17 @@ a {
 	display: inline;
 }
 
-.header {
-	position: fixed;
-	width: 100%;
-	background-color: white;
-	top: 0;
-	left: 0;
-	color: black;
-	text-align: center;
-	overflow: hidden;
-	z-index: 1000;
-}
-
 #icon_white {
-	color: black;
+	color: white;
 }
 
 .twitter_user, .youtube_user, .reddit_user, .tumblr_user {
-	color: black;
+	color: white;
 	display: inline;
 }
 
-.sidebar li {
-    background-color: #FFFFFF;
+.sidebar li, #regSubmit, #loginSubmit {
+    background-color: rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     font-weight: 800;
     font-size: 40px;
@@ -205,9 +207,9 @@ a {
     width: 70px;
 }
 
-.sidebar i {
+.sidebar i, #regSubmit, #loginSubmit {
 	font-size: 40px;
-	color: #076585;
+	color: white;
 }
 
 .user_bar {
@@ -223,14 +225,14 @@ a {
     float: left;
 }
 
-.sidebar li:hover {
+.sidebar li:hover, #regSubmit:hover, #loginSubmit:hover {
 	background-color: black;
 	color: white;
 	cursor: pointer;
 }
 
 .all p {
-	color: #076585;
+	color: rgba(255, 255, 255, 0.8);
 	word-wrap: break-word;
 }
 

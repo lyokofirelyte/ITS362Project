@@ -1,7 +1,30 @@
-body {
-	background: url('../img/flex-tone-2.png');
+.header {
+    background: url('../img/header_2.png');
+	background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center; 
+	position: fixed;
+	width: 100%;
+	color: white;
+	text-align: center;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	height: 60px;
+}
+
+.header h3 {
+	padding-left: 10px;	
 }
 
 p {
 	color: white;
+}
+
+.over_image {
+	height: 100vh;
+	width: 100vw;
+	z-index: 1000;
+	opacity: 0;
+	max-height: 100000px;
 }

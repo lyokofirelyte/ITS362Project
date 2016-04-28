@@ -1,71 +1,140 @@
-<?php 
-		use Abraham\TwitterOAuth\TwitterOAuth;
+<?php
+
+	use Abraham\TwitterOAuth\TwitterOAuth;
+
+	class Twitter {
+		public $access_token = "2240099846-df4Oh6JKYrDGnLM8AUq5lmEIRZ9DvhcxBfIjDb9";
+		public $access_token_secret = "kgXoq42Ekf6rGZu2aeYKlfjgPOPwoqeYG2qYQdtdmwu2U";
+		public $consumer_key = "ayYdLweDbNQpwOC2R4fOcKBU1";
+		public $consumer_secret = "8A4rYM6FvAKRyEMYcjk91MpUKA6Ta8nSJolvuhsr90AVEjUkD4";
+		public $request_token = [];
+		public $posts;
+		public $dbc;
 		
-		//if (isset($_SESSION["twitter_username"])){
-			
-			// later we can let users add their own - this is just for my account for testing purposes
-			$access_token = "2240099846-df4Oh6JKYrDGnLM8AUq5lmEIRZ9DvhcxBfIjDb9";
-			$access_token_secret = "kgXoq42Ekf6rGZu2aeYKlfjgPOPwoqeYG2qYQdtdmwu2U";
-			$consumer_key = "ayYdLweDbNQpwOC2R4fOcKBU1";
-			$consumer_secret = "8A4rYM6FvAKRyEMYcjk91MpUKA6Ta8nSJolvuhsr90AVEjUkD4";
-			
-			$connection = new TwitterOAuth($consumer_key, $consumer_secret, $access_token, $access_token_secret);
+		public function __init($dbc){
+			$this->dbc = $dbc;
+		}
+		
+		/**
+		 * Returns the profile info for the logged in twitter user.
+		 */
+		public function getUserData($oauth_token, $oauth_token_secret){
+			$connection = new TwitterOAuth($this->consumer_key, $this->consumer_secret, $oauth_token, $oauth_token_secret);
+			$me = $connection->get("account/verify_credentials");
+			return(
+				 "<div class='twitter_header' style='border: none'>" .
+					 "<i class='fa fa-twitter'></i> " .
+					 "<img src='" . $me->profile_image_url . "' />" .
+					 "<span class='twitter_self'> " . $me->name . "</span>" .
+					 "<span class='desc'> (" . $me->description . ")</span>" .
+				 "</div>"
+			 );
+		}
+		
+		/**
+		 *  They have already authorized thier account on twitter so we directly connect 
+		 */
+		public function connect($oauth_token, $oauth_token_secret){
+			$connection = new TwitterOAuth($this->consumer_key, $this->consumer_secret, $oauth_token, $oauth_token_secret);
 			$content = $connection->get("account/verify_credentials");
-			
-			//$me = $connection->get("users/lookup", ["screen_name" => "lyokofirelyte"]);
-			
-			/*echo(
-				"<div class='twitter_post' style='border: none'>" .
-					"<img src='" . $me[0]->profile_image_url . "' />" .
-					"<p class='twitter_self'>" . $me[0]->name . "'s Twitter Timeline</p>" .
-					"<div class='desc'>" . $me[0]->description . "</div>" .
-				"</div>" .		
-				"<br />"
-			);*/
-			
-			$_SESSION["twitter_statuses"] = $connection->get("statuses/home_timeline", ["count" => 100, "exclude_replies" => true]);
-		//}
+			$c = $connection->get("statuses/home_timeline", ["count" => 100, "exclude_replies" => true]);
+			$this->posts = (array) $c;
+		}
 		
-		$_SESSION["twitter_amount"] = 0;
-		
-		function addTwitterPost(){
+		/**
+		 * They're returning from hitting the "authorize" button on twitter.com
+		 */
+		public function confirmAuth(){
+			$request_token['oauth_token'] = $_SESSION['oauth_token'];
+			$request_token['oauth_token_secret'] = $_SESSION['oauth_token_secret'];
 			
+			$connection = new TwitterOAuth(
+				$this->consumer_key,
+				$this->consumer_secret,
+				$request_token['oauth_token'],
+				$request_token['oauth_token_secret']
+			);
+			
+			$access_token = $connection->oauth("oauth/access_token", ["oauth_verifier" => $_REQUEST['oauth_verifier']]);
+			$_SESSION["twitter"]["access_token"] = $access_token;
+			$email = $_SESSION['email'];
+			$sql2 = "insert into twitter (email, oauth_token, oauth_token_secret) values ('". $email . "', '" . $access_token['oauth_token'] ."', '" . $access_token["oauth_token_secret"] . "')";
+			$r = mysqli_query($this->dbc, $sql2);
+			echo("Twitter is now linked. Refresh to see changes.");
+		}
+		
+		/**
+		 * They have not added twitter yet so we get some temp keys and send them where they need to go 
+		 */
+		public function init(){
+			$_SESSION["auths"] = "twitter";
+			$connection = new TwitterOAuth($this->consumer_key, $this->consumer_secret, $this->access_token, $this->access_token_secret);
+			$request_token = $connection->oauth('oauth/request_token', array('oauth_callback' => function(){}));
+			$_SESSION['oauth_token'] = $request_token['oauth_token'];
+			$_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
+			$url = $connection->url('oauth/authorize', array('oauth_token' => $request_token['oauth_token']));
+			echo("<script type='text/javascript'>location.assign('" . $url . "')</script>");
+		}
+		
+		/**
+		 * Determines which function to call when they load this page
+		 */
+		public function checkDatabase(){
+			$email = $_SESSION["email"];
+			$sql = "select oauth_token, oauth_token_secret from twitter where email = '" . $email . "';";
+			$r = mysqli_query($this->dbc, $sql);
+			if (!is_null($r)){
+				$rows = mysqli_num_rows($r);
+				if ($rows > 0){
+					$row = $r->fetch_assoc();
+					$_SESSION["twitter"]["access_token"]["oauth_token"] = $row["oauth_token"];
+					$_SESSION["twitter"]["access_token"]["oauth_token_secret"]= $row["oauth_token_secret"];
+					return 0;
+				}
+			}
+			
+			return 1;
+		}
+		
+		public function addTwitterPost($i){
+		
 			try {
-				
-				$statuses = $_SESSION["twitter_statuses"];
+				$statuses = $this->posts;
 				$media = "";
-				$text = $statuses[$i]->text;
+				$text = "";
+				if (isset($statuses[$i]->text)){
+					$text = $statuses[$i]->text;
+				}
 				$x = 0;
-				$i = $_SESSION["twitter_amount"];
 					
-				if (!is_null($statuses[$i]->entities->urls[0]->expanded_url)){
+				if (isset($statuses[$i]->entities->urls[0]->expanded_url)){
 					foreach ($statuses[$i]->entities->urls as $current_url){
 						$full_url = $current_url->expanded_url;
 						$orig_url = $current_url->url;
-			
+							
 						if ($x == 0){
 							$orig_url = str_replace($orig_url, "<a href='" . $full_url . "'>" . $orig_url . "</a>", $orig_url);
 						}
-			
+							
 						$text = str_replace($current_url->url, $orig_url, $statuses[$i]->text);
 						$x = 0;
 					}
 				}
-					
-				if (!is_null($statuses[$i]->entities->media[0]->media_url)){
-					foreach ($statuses[$i]->entities->media as $image){
-						$media = "<img src='" . $image->media_url . "' />";
-					}
-				}
 				
+				try {
+					if (isset($statuses[$i]->entities->media[0]->media_url)){
+						foreach ($statuses[$i]->entities->media as $image){
+							$media = "<img src='" . $image->media_url . "' />";
+						}
+					}
+				} catch (Exception $this_page_is_the_death_of_me){}
+	
 				if (strlen($text) > 1){
-					echo(
+					return(
 						"<div class='twitter_post'>" .
 							"<div class='float-right'><i class='fa fa-twitter' id='icon_white'></i> <i class='fa fa-angle-up' id='arrows'></i></div>" .
 							"<div class='generic_header'>" .
-								//"<a class='generic_profile_image' href='" . str_replace("_normal", "", $statuses[$i]->user->profile_image_url). "'>" .
-									"<img src='" . $statuses[$i]->user->profile_image_url . "' />" .
-								//"</a>" .
+								"<img src='" . $statuses[$i]->user->profile_image_url . "' />" .
 								"<div class='generic_username'> " .
 									"<a href='http://twitter.com/" . str_replace("@", "", $statuses[$i]->user->screen_name) . "'>" . $statuses[$i]->user->name . "</a>" .
 								"</div>" .
@@ -75,9 +144,8 @@
 						"</div>"
 					);
 				}
-				
 			} catch (Exception $e){}
-			
-			$_SESSION["twitter_amount"]++;
+			return "fail";
 		}
+	}
 ?>

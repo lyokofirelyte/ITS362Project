@@ -1,0 +1,57 @@
+linkTwitter(){
+	$oauth_token = NULL;
+	$oauth_token_secret = NULL;
+	$email = $_SESSION["email"];
+	//some function returns these values
+	
+	
+	//make sure it doesn't already exist on twitter database
+	$sql = "Select email from twitter where wmail = '$email'";
+		
+		//if available create it
+		
+		$r = mysqli_query($dbc, $sql);
+		$rows = mysqli_num_rows($r);
+		if ($rows == 0) {
+			$sql2 = "insert into twitter (email, consumer_key, secret) values ('$email', '$oauth_token', '$oauth_token_secret')";
+			$r = mysqli_query($dbc, $sql2);
+			//echo mysqli_affected_rows($dbc);
+			if (mysqli_affected_rows($dbc) == 1){
+				//it was successfully inputted into the db
+				//echo "<h3>Inserted into twitter db</h3>";
+				//include(fromIncludes('footer.html'));
+			}
+			else {
+				echo "<h3>Failed to insert twitter db</h3>";
+			}
+		}
+
+	//update values on user database
+	$sql = "update user set twitter='yes' where email='$email';";
+	//run query
+	$r = mysqli_query($dbc, $sql);
+	
+	//set session variables for twitter
+	//i believe this is done in module twitter anyways so i left it blank
+	//except for the fact that twitter is linked so maybe we could use that like
+	//$_SESSION["twitter_linked"] = "yes";
+}
+
+unlinkTwitter(){
+	//remove twitter session variables
+	//unset($_SESSION["twitter_linked"]);
+	unset($_SESSION["oauth_token"]);
+	unset($_SESSION["oauth_token_secret"]);
+
+	
+	//remove twitter link from user table for that email and on twitter itself
+	$sql = "update user set twitter=NULL where email='$email';";
+	//run query
+	$r = mysqli_query($dbc, $sql);
+	
+	//remove row from twitter table
+	$sql = "delete from twitter where email='$email';";
+	//run query
+	$r = mysqli_query($dbc, $sql);
+	
+}

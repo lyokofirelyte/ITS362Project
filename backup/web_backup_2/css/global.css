@@ -1,0 +1,23 @@
+body {
+	background: url('../img/bg.png');
+	background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center; 
+}
+
+.header {
+    background: url('../img/header_2.png');
+	background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center; 
+	position: fixed;
+	width: 100%;
+	color: white;
+	text-align: center;
+	z-index: 1000;
+	top: 0;
+}
+
+p {
+	color: white;
+}

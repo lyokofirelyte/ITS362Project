@@ -1,0 +1,61 @@
+input {
+    text-align: center;
+    box-sizing: border-box;
+    font-weight: 800;
+    font-size: 25px;
+    -webkit-margin-before: .1em;
+    -webkit-margin-after: .1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    /*box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);*/
+	border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid white;
+    color: white;
+}
+
+.register_form, .login_form {
+    text-align: center;
+    position: fixed;
+    top: 220;
+    left: 0;
+    right: 0;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+#regSubmit, #loginSubmit {
+    width: 70px;
+    text-align: center;
+    vertical-align: center;
+    color: white;
+    background: transparent;
+}
+
+.info_panel {
+    text-align: center;
+    position: fixed;
+    top: 320;
+    left: 0;
+    padding: 10px;
+    margin: auto;
+}
+
+.info_panel_register {
+    text-align: center;
+    position: fixed;
+    top: 410;
+    left: 0;
+    padding: 10px;
+    margin: auto;
+}
+
+.main_title, .main_subtitle {
+	text-align: left;
+    left: 0;
+    padding: 5px;
+    margin: auto;
+    color: rgba(255, 255, 255, 0.8);
+    padding-left: 10px;
+}
